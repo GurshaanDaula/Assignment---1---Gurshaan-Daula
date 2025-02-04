@@ -145,8 +145,16 @@ MongoClient.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true 
 
         // Logout
         app.get('/logout', (req, res) => {
-            req.session.destroy();
-            res.redirect('/');
+            // Destroy the session
+            req.session.destroy((err) => {
+                if (err) {
+                    console.log('Error destroying session:', err);
+                    return res.redirect('/members');
+                }
+        
+                // Redirect to the home page after session is destroyed
+                res.redirect('/');
+            });
         });
 
         // 404 page
